@@ -24,14 +24,14 @@ impl Color {
     }
 
     pub fn from_hex(rgb_hex: &str) -> Self {
-        let r = u8::from_str_radix(&rgb_hex[1..2], 16).unwrap();
+        let r = u8::from_str_radix(&rgb_hex[1..3], 16).unwrap();
         let g = u8::from_str_radix(&rgb_hex[3..5], 16).unwrap();
         let b = u8::from_str_radix(&rgb_hex[5..], 16).unwrap();
         Color { r, g, b }
     }
 
     pub fn to_hex(self) -> String {
-        format!("#{:X}{:X}{:X}", self.r, self.g, self.b)
+        format!("#{:02X}{:02X}{:02X}", self.r, self.g, self.b)
     }
 
     pub fn darken(self, amount: f32) -> Self {
@@ -117,6 +117,12 @@ impl Color {
             g: ((g1 + m) * 255.0) as u8,
             b: ((b1 + m) * 255.0) as u8,
         }
+    }
+}
+
+impl std::fmt::Display for Color {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.to_hex())
     }
 }
 

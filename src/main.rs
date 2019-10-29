@@ -23,5 +23,7 @@ fn main() {
     };
     let picture = Path::new(picture);
     let palette = get(&picture, brightness);
-    println!("{:#?}", palette);
+    for (i, color) in palette.iter().enumerate() {
+        println!("Color {}: {}", i, color);
+    }
 }

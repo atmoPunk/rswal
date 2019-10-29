@@ -17,12 +17,13 @@ fn imagemagick(color_count: i32, img: &Path, magic_command: &str) -> Vec<Color> 
     let flags = [
         img.to_str().unwrap(),
         "-resize",
-        "%25",
+        "25%",
         "-colors",
         &color_count.to_string(),
         "-unique-colors",
         "txt:-",
     ];
+
     let output = Command::new(magic_command)
         .args(&flags)
         .output()
@@ -42,8 +43,7 @@ fn generate_colors(img: &Path) -> Vec<Color> {
     let mut raw_colors: Vec<Color> = Vec::new();
     for i in 0..20 {
         raw_colors = imagemagick(16 + i, img, magick_command);
-
-        if raw_colors.len() > 16 {
+        if raw_colors.len() > 15 {
             break;
         }
     }
