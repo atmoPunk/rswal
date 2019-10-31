@@ -2,9 +2,15 @@ use crate::brightness::Brightness;
 use crate::color::Color;
 use std::path::Path;
 use std::process::Command;
+use crate::median_cut::get_pallette;
 
 pub fn get(img: &Path, light: Brightness) -> Vec<Color> {
     let colors: Vec<Color> = generate_colors(img);
+    adjust(&colors, light)
+}
+
+pub fn get_my(img: &Path, light: Brightness) -> Vec<Color> {
+    let colors = get_pallette(img);
     adjust(&colors, light)
 }
 
