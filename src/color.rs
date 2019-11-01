@@ -1,26 +1,21 @@
 #[derive(Debug, Clone, Copy)]
 pub struct Color {
-    r: u8,
-    g: u8,
-    b: u8,
+    pub r: u8,
+    pub g: u8,
+    pub b: u8,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub enum ColorOrderBy {
+    R,
+    G,
+    B,
 }
 
 #[allow(dead_code)]
 impl Color {
     pub fn new(r: u8, g: u8, b: u8) -> Self {
         Color { r, g, b }
-    }
-
-    pub fn r(self) -> u8 {
-        self.r
-    }
-
-    pub fn g(self) -> u8 {
-        self.g
-    }
-
-    pub fn b(self) -> u8 {
-        self.b
     }
 
     pub fn from_hex(rgb_hex: &str) -> Self {
@@ -64,7 +59,7 @@ impl Color {
         Color::from_hsl(h, s, l)
     }
 
-    fn to_hsl(self) -> [f32; 3] {
+    pub fn to_hsl(self) -> [f32; 3] {
         let r_normalized = f32::from(self.r) / 255.0;
         let g_normalized = f32::from(self.g) / 255.0;
         let b_normalized = f32::from(self.b) / 255.0;
@@ -98,7 +93,7 @@ impl Color {
         [h, s, l]
     }
 
-    fn from_hsl(h: f32, s: f32, l: f32) -> Self {
+    pub fn from_hsl(h: f32, s: f32, l: f32) -> Self {
         let chroma = (1.0 - (2.0 * l - 1.0).abs()) * s;
         let h_segment = (h / 60.0) as i32;
         let x = chroma * (1.0 - (h_segment % 2 - 1) as f32);
@@ -117,6 +112,61 @@ impl Color {
             g: ((g1 + m) * 255.0) as u8,
             b: ((b1 + m) * 255.0) as u8,
         }
+    }
+
+    pub fn compare_by(p1: Color, p2: Color, order: ColorOrderBy) -> std::cmp::Ordering {
+        match order {
+            ColorOrderBy::R => {
+                if p1.r < p2.r {
+                    std::cmp::Ordering::Less
+                } else if p1.r == p2.r {
+                    std::cmp::Ordering::Equal
+                } else {
+                    std::cmp::Ordering::Greater
+                }
+            }
+            ColorOrderBy::G => {
+                if p1.g < p2.g {
+                    std::cmp::Ordering::Less
+                } else if p1.g == p2.g {
+                    std::cmp::Ordering::Equal
+                } else {
+                    std::cmp::Ordering::Greater
+                }
+            }
+            ColorOrderBy::B => {
+                if p1.b < p2.b {
+                    std::cmp::Ordering::Less
+                } else if p1.b == p2.b {
+                    std::cmp::Ordering::Equal
+                } else {
+                    std::cmp::Ordering::Greater
+                }
+            }
+        }
+    }
+
+    pub fn find_color(line: &str) -> Color {
+        let start = line.find('#').unwrap();
+        Color::from_hex(&line[start..start + 7])
+    }
+
+    pub fn average_color(pixels: &[Color]) -> Color {
+        let mut r: u64 = 0;
+        let mut g: u64 = 0;
+        let mut b: u64 = 0;
+        for pixel in pixels.iter() {
+            r += u64::from(pixel.r);
+            g += u64::from(pixel.g);
+            b += u64::from(pixel.b);
+        }
+        r /= pixels.len() as u64;
+        g /= pixels.len() as u64;
+        b /= pixels.len() as u64;
+        let r = r as u8;
+        let g = g as u8;
+        let b = b as u8;
+        Color::new(r, g, b)
     }
 }
 

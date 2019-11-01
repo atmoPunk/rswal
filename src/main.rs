@@ -1,14 +1,17 @@
 extern crate image;
 
+mod backend;
 mod brightness;
 mod color;
-mod wal;
 mod median_cut;
+mod wal;
 
+use backend::get;
 use brightness::Brightness;
+use median_cut::MedianCutBackend;
 use std::env;
 use std::path::Path;
-use wal::{get, get_my};
+use wal::WalBackend;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -26,12 +29,14 @@ fn main() {
         None => Brightness::Dark,
     };
     let picture = Path::new(picture);
-    let palette = get(&picture, brightness);
+    let wbe = WalBackend {};
+    let mcbe = MedianCutBackend {};
+    let palette = get(&picture, brightness, wbe);
     for (i, color) in palette.iter().enumerate() {
         println!("Color {}: {}", i, color);
     }
     println!("=====");
-    let palette = get_my(&picture, brightness);
+    let palette = get(&picture, brightness, mcbe);
     for (i, color) in palette.iter().enumerate() {
         println!("Color {}: {}", i, color);
     }
