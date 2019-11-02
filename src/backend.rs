@@ -6,7 +6,7 @@ pub trait Backend {
     fn generate_colors(&self, img: &Path) -> Vec<Color>;
 }
 
-pub fn get(img: &Path, light: Brightness, backend: impl Backend) -> Vec<Color> {
+pub fn get(img: &Path, light: Brightness, backend: Box<dyn Backend>) -> Vec<Color> {
     let colors: Vec<Color> = backend.generate_colors(img);
     adjust(&colors, light)
 }

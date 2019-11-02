@@ -3,6 +3,7 @@ use crate::color::{Color, ColorOrderBy};
 use image::GenericImageView;
 use std::path::Path;
 
+#[derive(Clone, Copy, Debug)]
 pub struct MedianCutBackend {}
 
 impl Backend for MedianCutBackend {

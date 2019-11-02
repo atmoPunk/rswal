@@ -1,3 +1,6 @@
+use crate::util::get_max;
+use crate::util::get_min;
+
 #[derive(Debug, Clone, Copy)]
 pub struct Color {
     pub r: u8,
@@ -173,33 +176,5 @@ impl Color {
 impl std::fmt::Display for Color {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.to_hex())
-    }
-}
-
-fn get_max(a: f32, b: f32, c: f32) -> f32 {
-    if a > b {
-        if a > c {
-            a
-        } else {
-            c
-        }
-    } else if b > c {
-        b
-    } else {
-        c
-    }
-}
-
-fn get_min(a: f32, b: f32, c: f32) -> f32 {
-    if a < b {
-        if a < c {
-            a
-        } else {
-            c
-        }
-    } else if b < c {
-        b
-    } else {
-        c
     }
 }

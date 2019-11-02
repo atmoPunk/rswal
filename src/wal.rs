@@ -3,6 +3,7 @@ use crate::color::Color;
 use std::path::Path;
 use std::process::Command;
 
+#[derive(Clone, Copy, Debug)]
 pub struct WalBackend {}
 
 impl Backend for WalBackend {
